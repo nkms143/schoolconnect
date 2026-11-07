@@ -18,7 +18,7 @@ Make sure your repository has `render.yaml` at the root.
 4. Render will detect the `render.yaml` blueprint:
    - **Database**: `schoolconnect-postgres` (Free PostgreSQL)
    - **Backend Web Service**: `schoolconnect-backend` (Node.js runtime)
-   - **Frontend Web Service**: `schoolconnect-frontend` (Static React build)
+   - **Frontend Web Service**: `schoolconnect` (Static React build)
 5. Click **Apply Blueprint**.
 6. Render will automatically provision the database, build both projects, execute Prisma schema push, and seed the demo data!
 
@@ -61,7 +61,7 @@ If you prefer deploying services manually through the Render dashboard:
    - `DATABASE_URL`: *(Paste Render PostgreSQL internal URL)*
    - `JWT_SECRET`: *(Generate a secure 32+ character random secret)*
    - `JWT_EXPIRES_IN`: `7d`
-   - `CLIENT_URL`: `https://schoolconnect-frontend.onrender.com` *(Update after creating frontend)*
+   - `CLIENT_URL`: `https://schoolconnect.onrender.com` *(Update after creating frontend)*
 5. Click **Create Web Service**. Wait for the build and seed logs to finish with `🚀 SchoolConnect Server running on port 10000`.
 
 ---
@@ -70,7 +70,7 @@ If you prefer deploying services manually through the Render dashboard:
 1. Go to **New +** > **Static Site**.
 2. Connect your repository.
 3. Configure settings:
-   - **Name**: `schoolconnect-frontend`
+   - **Name**: `schoolconnect`
    - **Root Directory**: `client`
    - **Build Command**: `npm install && npm run build`
    - **Publish Directory**: `dist`
@@ -87,7 +87,7 @@ If you prefer deploying services manually through the Render dashboard:
 
 ## 4. Verification & Testing
 
-Once deployed, visit your frontend URL (e.g., `https://schoolconnect-frontend.onrender.com`):
+Once deployed, visit your frontend URL (e.g., `https://schoolconnect.onrender.com`):
 1. **Student Login**: Click the demo button for `alex@schoolconnect.edu` (Password: `Password123!`).
 2. **Teacher Login**: Click `teacher@schoolconnect.edu` to test publishing official school circulars.
 3. **Admin Login**: Click `admin@schoolconnect.edu` to inspect student moderation and platform statistics.
