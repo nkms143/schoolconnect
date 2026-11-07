@@ -37,17 +37,13 @@ services:
       - key: JWT_EXPIRES_IN
         value: 7d
       - key: CLIENT_URL
-        fromService:
-          type: web
-          name: schoolconnect-frontend
-          property: url
+        value: "*"
 
-  # Frontend React Static or Web App on Render
+  # Frontend React Static Site on Render
   - type: web
     name: schoolconnect-frontend
     env: static
     plan: free
-    region: oregon
     rootDir: client
     buildCommand: npm install && npm run build
     staticPublishPath: dist
@@ -60,9 +56,9 @@ services:
         fromService:
           type: web
           name: schoolconnect-backend
-          property: url
+          property: host
       - key: VITE_SOCKET_URL
         fromService:
           type: web
           name: schoolconnect-backend
-          property: url
+          property: host

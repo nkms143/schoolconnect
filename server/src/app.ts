@@ -21,7 +21,21 @@ export const createApp = (): Application => {
   // CORS configuration
   app.use(
     cors({
-      origin: [ENV.CLIENT_URL, 'http://localhost:5173', 'http://127.0.0.1:5173'],
+      origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps, curl, or same-origin)
+        if (!origin) return callback(null, true);
+        if (
+          ENV.CLIENT_URL === '*' ||
+          origin === ENV.CLIENT_URL ||
+          origin === `https://${ENV.CLIENT_URL}` ||
+          origin.endsWith('.onrender.com') ||
+          origin.includes('localhost') ||
+          origin.includes('127.0.0.1')
+        ) {
+          return callback(null, true);
+        }
+        return callback(null, true);
+      },
       credentials: true
     })
   );

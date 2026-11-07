@@ -24,7 +24,12 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return;
     }
 
-    const socketUrl = import.meta.env.VITE_SOCKET_URL || window.location.origin;
+    let socketUrl = (import.meta.env.VITE_SOCKET_URL || '').trim();
+    if (!socketUrl) {
+      socketUrl = window.location.origin;
+    } else if (!socketUrl.startsWith('http://') && !socketUrl.startsWith('https://')) {
+      socketUrl = `https://${socketUrl}`;
+    }
     const newSocket = io(socketUrl, {
       auth: { token },
       transports: ['websocket', 'polling']

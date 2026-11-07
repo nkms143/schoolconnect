@@ -1,4 +1,4 @@
-import { api, getAuthToken } from './api';
+import { api, getAuthToken, BASE_URL } from './api';
 import { Post, Comment } from '../types';
 
 export const postService = {
@@ -50,7 +50,8 @@ export const postService = {
     formData.append('image', file);
 
     const token = getAuthToken();
-    const response = await fetch('/api/v1/posts/upload', {
+    const uploadUrl = BASE_URL ? `${BASE_URL}/api/v1/posts/upload` : '/api/v1/posts/upload';
+    const response = await fetch(uploadUrl, {
       method: 'POST',
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {})
@@ -62,6 +63,9 @@ export const postService = {
     if (!response.ok) {
       throw new Error(data.message || 'Image upload failed');
     }
-    return data.data.url;
+    const returnedUrl = data.data.url;
+    return (returnedUrl.startsWith('http') || !BASE_URL)
+      ? returnedUrl
+      : `${BASE_URL}${returnedUrl}`;
   }
 };
