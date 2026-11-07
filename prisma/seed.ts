@@ -6,6 +6,14 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting SchoolConnect Database Seeding...');
 
+  // Check if database is already seeded (e.g. during server restarts in production)
+  const existingUsers = await prisma.user.count();
+  if (existingUsers > 0 && process.env.FORCE_SEED !== 'true') {
+    console.log(`ℹ️ Database already populated (${existingUsers} users found). Skipping seeding to preserve data.`);
+    console.log('💡 Set FORCE_SEED=true if you want to wipe and re-seed all tables.');
+    return;
+  }
+
   // Clean existing records if any
   try {
     await prisma.report.deleteMany({});
