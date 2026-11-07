@@ -16,11 +16,10 @@ Make sure your repository has `render.yaml` at the root.
 2. Click **New +** in the top navigation bar and select **Blueprint**.
 3. Connect your Git repository (`SchoolConnect`).
 4. Render will detect the `render.yaml` blueprint:
-   - **Database**: `schoolconnect-postgres` (Free PostgreSQL)
    - **Backend Web Service**: `schoolconnect-backend` (Node.js runtime)
    - **Frontend Web Service**: `schoolconnect` (Static React build)
-5. Click **Apply Blueprint**.
-6. Render will automatically provision the database, build both projects, execute Prisma schema push, and seed the demo data!
+5. Under Environment Variables for `schoolconnect-backend`, paste your Supabase `DATABASE_URL` (Connection Pooler URL).
+6. Click **Apply Blueprint**. Render will build both projects, execute Prisma schema push to Supabase, seed the demo data, and go live!
 
 ---
 
