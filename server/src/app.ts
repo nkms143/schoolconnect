@@ -48,6 +48,17 @@ export const createApp = (): Application => {
   const uploadsPath = path.resolve(process.cwd(), 'uploads');
   app.use('/uploads', express.static(uploadsPath));
 
+  // Root status
+  app.get('/', (req: Request, res: Response) => {
+    res.json({
+      success: true,
+      service: 'SchoolConnect API',
+      status: 'online',
+      version: '1.0.0',
+      timestamp: new Date().toISOString()
+    });
+  });
+
   // Health check
   app.get('/api/health', (req: Request, res: Response) => {
     res.json({
