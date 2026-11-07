@@ -30,6 +30,15 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } else if (!socketUrl.startsWith('http://') && !socketUrl.startsWith('https://')) {
       socketUrl = `https://${socketUrl}`;
     }
+    if (socketUrl) {
+      try {
+        const urlObj = new URL(socketUrl);
+        if (!urlObj.hostname.includes('.') && urlObj.hostname !== 'localhost') {
+          urlObj.hostname = `${urlObj.hostname}.onrender.com`;
+          socketUrl = urlObj.origin;
+        }
+      } catch {}
+    }
     const newSocket = io(socketUrl, {
       auth: { token },
       transports: ['websocket', 'polling']

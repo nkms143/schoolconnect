@@ -2,6 +2,15 @@ let rawBase = (import.meta.env.VITE_API_URL || '').trim();
 if (rawBase && !rawBase.startsWith('http://') && !rawBase.startsWith('https://')) {
   rawBase = `https://${rawBase}`;
 }
+if (rawBase) {
+  try {
+    const urlObj = new URL(rawBase);
+    if (!urlObj.hostname.includes('.') && urlObj.hostname !== 'localhost') {
+      urlObj.hostname = `${urlObj.hostname}.onrender.com`;
+      rawBase = urlObj.origin;
+    }
+  } catch {}
+}
 export const BASE_URL = rawBase;
 
 export interface ApiResponse<T = any> {
