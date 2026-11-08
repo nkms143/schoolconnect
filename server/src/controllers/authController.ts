@@ -42,7 +42,8 @@ export const register = async (req: Request, res: Response) => {
       data: {
         email: email.toLowerCase().trim(),
         password: hashedPassword,
-        role: role === 'TEACHER' ? 'TEACHER' : role === 'ADMIN' ? 'ADMIN' : 'STUDENT',
+        // Public registration allows STUDENT or TEACHER; ADMIN cannot be self-assigned
+        role: role === 'TEACHER' ? 'TEACHER' : 'STUDENT',
         isVerified: true, // Auto-verified for ease of demo, token kept for manual verification flow test
         verificationToken,
         profile: {

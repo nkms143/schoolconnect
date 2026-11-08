@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { GraduationCap, Mail, Lock, LogIn, ArrowRight, Sparkles } from 'lucide-react';
+import { GraduationCap, Mail, Lock, LogIn } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/common/Button';
 import { ThemeToggle } from '../components/common/ThemeToggle';
@@ -25,19 +25,6 @@ export const LoginPage: React.FC = () => {
       navigate('/');
     } catch (err: any) {
       setError(err.message || 'Invalid email or password.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDemoLogin = async (demoEmail: string) => {
-    try {
-      setIsLoading(true);
-      setError('');
-      await login(demoEmail, 'Password123!');
-      navigate('/');
-    } catch (err: any) {
-      setError(err.message || 'Demo login failed. Has database been seeded?');
     } finally {
       setIsLoading(false);
     }
@@ -126,46 +113,6 @@ export const LoginPage: React.FC = () => {
               Sign In
             </Button>
           </form>
-
-          {/* Quick Demo Logins Section */}
-          <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 mb-3 justify-center">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>Instant Demo Accounts (1-Click Login):</span>
-            </div>
-
-            <div className="grid grid-cols-1 gap-2">
-              <button
-                type="button"
-                onClick={() => handleDemoLogin('alex@schoolconnect.edu')}
-                disabled={isLoading}
-                className="w-full px-3 py-2 text-xs font-semibold rounded-xl bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/60 transition-colors flex items-center justify-between"
-              >
-                <span>🎓 Student: <strong>Alex Rivera</strong> (Grade 10-A)</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-60" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleDemoLogin('teacher@schoolconnect.edu')}
-                disabled={isLoading}
-                className="w-full px-3 py-2 text-xs font-semibold rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/50 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-900/60 transition-colors flex items-center justify-between"
-              >
-                <span>👨‍🏫 Teacher: <strong>Mrs. Sarah Johnson</strong> (Science)</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-60" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleDemoLogin('admin@schoolconnect.edu')}
-                disabled={isLoading}
-                className="w-full px-3 py-2 text-xs font-semibold rounded-xl bg-purple-50 hover:bg-purple-100 dark:bg-purple-950/40 dark:hover:bg-purple-900/50 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-900/60 transition-colors flex items-center justify-between"
-              >
-                <span>★ Principal / Admin: <strong>Arthur Edwards</strong></span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-60" />
-              </button>
-            </div>
-          </div>
 
           <div className="mt-6 text-center text-xs text-slate-500">
             Don't have an account yet?{' '}

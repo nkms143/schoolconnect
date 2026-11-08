@@ -153,7 +153,6 @@ export const RegisterPage: React.FC = () => {
               >
                 <option value="STUDENT">🎓 Student</option>
                 <option value="TEACHER">👨‍🏫 Teacher / Faculty</option>
-                <option value="ADMIN">★ School Administrator</option>
               </select>
             </div>
 
