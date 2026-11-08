@@ -13,7 +13,11 @@ import {
   Sparkles,
   LogOut,
   User as UserIcon,
-  Search
+  Search,
+  HelpCircle,
+  Trophy,
+  FileText,
+  BookOpen
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Avatar } from '../common/Avatar';
@@ -54,6 +58,13 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
     { label: 'Notice Board', path: '/notices', icon: ClipboardList },
     { label: 'Friends & Classmates', path: '/friends', icon: UserCheck },
     { label: 'Messages & Chat', path: '/messages', icon: MessageSquare }
+  ];
+
+  const academicItems = [
+    { label: 'Quiz Competitions', path: '/quizzes', icon: HelpCircle },
+    { label: 'Leaderboard', path: '/leaderboard', icon: Trophy },
+    { label: 'Assignments', path: '/assignments', icon: FileText },
+    { label: 'Study Notes', path: '/notes', icon: BookOpen }
   ];
 
   if (user?.role === 'ADMIN' || user?.role === 'TEACHER') {
@@ -188,6 +199,32 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
                 </NavLink>
               );
             })}
+
+            <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1">
+                Academics & Learning
+              </p>
+              {academicItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    onClick={onClose}
+                    className={({ isActive }) =>
+                      `flex items-center gap-3.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
+                        isActive
+                          ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-400 font-bold shadow-sm'
+                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
+                      }`
+                    }
+                  >
+                    <Icon className="w-4 h-4 flex-shrink-0" />
+                    <span>{item.label}</span>
+                  </NavLink>
+                );
+              })}
+            </div>
           </nav>
 
           {/* School Clubs Section */}

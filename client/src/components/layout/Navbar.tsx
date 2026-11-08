@@ -9,7 +9,11 @@ import {
   User as UserIcon,
   ShieldAlert,
   Menu,
-  X
+  X,
+  HelpCircle,
+  Trophy,
+  FileText,
+  BookOpen
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Avatar } from '../common/Avatar';
@@ -195,6 +199,38 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenMobileMenu }) => {
                         >
                           <UserIcon className="w-4 h-4 text-slate-400" />
                           View My Profile
+                        </Link>
+
+                        <Link
+                          to="/quizzes"
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                        >
+                          <HelpCircle className="w-4 h-4 text-blue-500" />
+                          Quiz Competitions
+                        </Link>
+
+                        <Link
+                          to="/leaderboard"
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                        >
+                          <Trophy className="w-4 h-4 text-amber-500" />
+                          Quiz Leaderboard
+                        </Link>
+
+                        <Link
+                          to="/assignments"
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                        >
+                          <FileText className="w-4 h-4 text-indigo-500" />
+                          Assignments
+                        </Link>
+
+                        <Link
+                          to="/notes"
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                        >
+                          <BookOpen className="w-4 h-4 text-purple-500" />
+                          Study Notes
                         </Link>
 
                         {(user.role === 'ADMIN' || user.role === 'TEACHER') && (

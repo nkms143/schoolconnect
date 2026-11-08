@@ -14,6 +14,9 @@ import announcementRoutes from './routes/announcementRoutes.js';
 import friendRoutes from './routes/friendRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import quizRoutes from './routes/quizRoutes.js';
+import assignmentRoutes from './routes/assignmentRoutes.js';
+import noteRoutes from './routes/noteRoutes.js';
 
 export const createApp = (): Application => {
   const app = express();
@@ -78,6 +81,9 @@ export const createApp = (): Application => {
   app.use('/api/v1/friends', friendRoutes);
   app.use('/api/v1/messages', messageRoutes);
   app.use('/api/v1/admin', adminRoutes);
+  app.use('/api/v1/quizzes', quizRoutes);
+  app.use('/api/v1/assignments', assignmentRoutes);
+  app.use('/api/v1/notes', noteRoutes);
 
   // Fallback 404
   app.use((req: Request, res: Response) => {

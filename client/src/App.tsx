@@ -19,6 +19,10 @@ import { NoticeBoardPage } from './pages/NoticeBoardPage';
 import { FriendsPage } from './pages/FriendsPage';
 import { MessagesPage } from './pages/MessagesPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
+import { QuizzesPage } from './pages/QuizzesPage';
+import { QuizLeaderboardPage } from './pages/QuizLeaderboardPage';
+import { AssignmentsPage } from './pages/AssignmentsPage';
+import { StudyNotesPage } from './pages/StudyNotesPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -131,6 +135,46 @@ export const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <AdminDashboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/quizzes"
+                element={
+                  <ProtectedRoute>
+                    <QuizzesPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/quizzes/:quizId/leaderboard"
+                element={
+                  <ProtectedRoute>
+                    <QuizLeaderboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/leaderboard"
+                element={
+                  <ProtectedRoute>
+                    <QuizLeaderboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/assignments"
+                element={
+                  <ProtectedRoute>
+                    <AssignmentsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/notes"
+                element={
+                  <ProtectedRoute>
+                    <StudyNotesPage />
                   </ProtectedRoute>
                 }
               />
