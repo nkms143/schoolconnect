@@ -7,8 +7,12 @@ async function main() {
   console.log('🌱 Starting SchoolConnect Production Database Initialization...');
 
   // Check if database is already seeded (skip if Super Admin exists to preserve production data)
-  const existingSuperAdmin = await prisma.user.findUnique({
-    where: { email: 'nksm143@gmail.com' }
+  const existingSuperAdmin = await prisma.user.findFirst({
+    where: {
+      email: {
+        in: ['nksm143@gmail.com', 'nkms143@gmail.com']
+      }
+    }
   });
 
   if (existingSuperAdmin && process.env.FORCE_SEED !== 'true') {
