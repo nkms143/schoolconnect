@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
 import { RightSidebar } from './RightSidebar';
 import { MobileNav } from './MobileNav';
+import { MobileDrawer } from './MobileDrawer';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,13 +11,21 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = ({ children, showRightSidebar = true }) => {
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
-      <Navbar />
+      <Navbar onOpenMobileMenu={() => setIsMobileDrawerOpen(true)} />
+
+      {/* Slide-over Mobile Side Pane (Drawer) */}
+      <MobileDrawer
+        isOpen={isMobileDrawerOpen}
+        onClose={() => setIsMobileDrawerOpen(false)}
+      />
 
       <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20 md:pb-6">
         <div className="flex gap-6 items-start">
-          {/* Main Sidebar */}
+          {/* Main Sidebar (Desktop) */}
           <Sidebar />
 
           {/* Main Center Content */}
@@ -28,7 +37,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, showRightSidebar = tru
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <MobileNav />
+      <MobileNav onOpenMenu={() => setIsMobileDrawerOpen(true)} />
     </div>
   );
 };
