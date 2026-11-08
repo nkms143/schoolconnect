@@ -125,13 +125,14 @@ export const AssignmentsPage: React.FC = () => {
             </div>
 
             {isTeacherOrAdmin && (
-              <Button
+              <button
+                type="button"
                 onClick={() => setIsCreateOpen(true)}
-                className="bg-white text-indigo-600 hover:bg-indigo-50 shadow-md font-bold self-start md:self-auto"
-                leftIcon={<Plus className="w-4 h-4" />}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white hover:bg-indigo-50 text-indigo-700 font-extrabold text-xs sm:text-sm shadow-lg shadow-indigo-900/20 transition-all transform active:scale-95 self-start md:self-auto"
               >
-                Post New Assignment
-              </Button>
+                <Plus className="w-4 h-4 stroke-[3]" />
+                <span>Post New Assignment</span>
+              </button>
             )}
           </div>
         </div>

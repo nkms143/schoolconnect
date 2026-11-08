@@ -111,13 +111,14 @@ export const StudyNotesPage: React.FC = () => {
               </p>
             </div>
 
-            <Button
+            <button
+              type="button"
               onClick={() => setIsUploadOpen(true)}
-              className="bg-white text-purple-600 hover:bg-purple-50 shadow-md font-bold self-start md:self-auto"
-              leftIcon={<Plus className="w-4 h-4" />}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white hover:bg-purple-50 text-purple-700 font-extrabold text-xs sm:text-sm shadow-lg shadow-purple-900/20 transition-all transform active:scale-95 self-start md:self-auto"
             >
-              Share Revision Notes
-            </Button>
+              <Plus className="w-4 h-4 stroke-[3]" />
+              <span>Share Revision Notes</span>
+            </button>
           </div>
         </div>
 

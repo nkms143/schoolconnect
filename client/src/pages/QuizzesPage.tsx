@@ -119,13 +119,14 @@ export const QuizzesPage: React.FC = () => {
               </Link>
 
               {isTeacherOrAdmin && (
-                <Button
+                <button
+                  type="button"
                   onClick={() => setIsCreateOpen(true)}
-                  className="bg-white text-blue-600 hover:bg-blue-50 shadow-md font-bold"
-                  leftIcon={<Plus className="w-4 h-4" />}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white hover:bg-blue-50 text-blue-700 font-extrabold text-xs sm:text-sm shadow-lg shadow-blue-900/20 transition-all transform active:scale-95"
                 >
-                  Conduct New Quiz
-                </Button>
+                  <Plus className="w-4 h-4 stroke-[3]" />
+                  <span>Conduct New Quiz</span>
+                </button>
               )}
             </div>
           </div>
