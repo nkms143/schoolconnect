@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SchoolConnect – System Prompt & Architectural Specification</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    @page {
+      size: A4;
+      margin: 16mm 14mm 16mm 14mm;
+      @bottom-right {
+        content: counter(page);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1e293b;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .header-banner {
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #6366f1 100%);
+      color: #ffffff;
+      padding: 24px 28px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.15);
+    }
+
+    .header-banner h1 {
+      font-size: 22pt;
+      font-weight: 800;
+      margin: 0 0 6px 0;
+      color: #ffffff;
+      border: none;
+      padding: 0;
+      letter-spacing: -0.5px;
+    }
+
+    .header-banner p {
+      margin: 0;
+      font-size: 11pt;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    h1 {
+      font-size: 18pt;
+      font-weight: 800;
+      color: #0f172a;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin-top: 22px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: 700;
+      color: #0369a1;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      page-break-after: avoid;
+    }
+
+    h4 {
+      font-size: 11pt;
+      font-weight: 600;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p, li {
+      font-size: 10.5pt;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    ul, ol {
+      margin-top: 6px;
+      margin-bottom: 14px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #e2e8f0;
+      margin: 22px 0;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 16px 0 20px 0;
+      font-size: 9.5pt;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+      text-align: left;
+      padding: 8px 12px;
+      border-bottom: 2px solid #cbd5e1;
+      border-right: 1px solid #e2e8f0;
+    }
+
+    th:last-child {
+      border-right: none;
+    }
+
+    td {
+      padding: 7px 12px;
+      border-bottom: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      color: #334155;
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    /* Code Blocks */
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 14px 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', Consolas, Monaco, 'Courier New', monospace;
+      font-size: 8.5pt;
+      line-height: 1.5;
+      margin: 14px 0 18px 0;
+      page-break-inside: avoid;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid #1e293b;
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      font-size: inherit;
+      border: none;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', Consolas, Monaco, 'Courier New', monospace;
+      font-size: 9pt;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 5px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Blockquotes */
+    blockquote {
+      border-left: 4px solid #3b82f6;
+      background-color: #eff6ff;
+      margin: 14px 0;
+      padding: 10px 16px;
+      border-radius: 0 8px 8px 0;
+      color: #1e3a8a;
+      font-style: normal;
+    }
+
+    /* Badges & Highlights */
+    strong {
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 8pt;
+      font-weight: 700;
+      border-radius: 12px;
+      background-color: #e0e7ff;
+      color: #3730a3;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+      }
+      .no-print {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 id="schoolconnect-full-stack-school-social-academic-platform">SchoolConnect – Full-Stack School Social &amp; Academic Platform</h1>
+<h2 id="google-ai-studio-master-system-prompt-architectural-specification">Google AI Studio Master System Prompt &amp; Architectural Specification</h2>
+<hr />
+<h2 id="1-executive-overview">1. Executive Overview</h2>
+<p><strong>SchoolConnect</strong> is a production-grade, full-stack educational community platform designed specifically for school environments. It unifies modern, safe student social interaction with a rigorous <strong>Academic Suite</strong> (untimed quiz competitions, school-wide leaderboards, homework assignment management, and a collaborative study notes repository).</p>
+<p>The platform bridges the gap between social engagement and academic excellence in a closed, moderated, school-first environment featuring fine-grained Role-Based Access Control (RBAC) across <strong>Students</strong>, <strong>Teachers/Faculty</strong>, and <strong>Super Administrators</strong>.</p>
+<hr />
+<h2 id="2-core-functional-modules">2. Core Functional Modules</h2>
+<h3 id="a-authentication-account-security">A. Authentication &amp; Account Security</h3>
+<ul>
+<li><strong>Email Registration &amp; Login</strong>: Registration with school email, full name, role selection, class, and section.</li>
+<li><strong>JWT Bearer Token Authentication</strong>: Secure token issuance (<code>7d</code> validity), authorization headers (<code>Bearer &lt;token&gt;</code>), and persistent login state.</li>
+<li><strong>Password Security</strong>: Bcrypt hashing (salt rounds: 12).</li>
+<li><strong>Password Reset Flow</strong>: Cryptographically secure token generation (<code>crypto.randomBytes</code>), expiring in 1 hour, delivered via email/Nodemailer with verification endpoints.</li>
+<li><strong>Email Verification</strong>: Account activation token workflow ensuring genuine student identity.</li>
+<li><strong>Account Moderation &amp; Locking</strong>: Real-time <code>isBlocked</code> flag check on every authenticated request.</li>
+</ul>
+<h3 id="b-user-profiles-digital-identity">B. User Profiles &amp; Digital Identity</h3>
+<ul>
+<li>Profile avatar upload and custom cover banner.</li>
+<li>Academic metadata: Class/Grade (e.g., <em>Grade 9</em>), Section (e.g., <em>Section A</em>).</li>
+<li>Personal Bio, Interests &amp; Hobbies tags, contact details.</li>
+<li>User activity overview: Posts published, clubs joined, competitions taken, assignments turned in, and helpful notes shared.</li>
+</ul>
+<h3 id="c-safe-social-feed-student-networking">C. Safe Social Feed &amp; Student Networking</h3>
+<ul>
+<li><strong>Post Creation</strong>: Rich text posts with optional image attachments and hashtag parsing (<code>#science</code>, <code>#sports</code>).</li>
+<li><strong>Engagements</strong>: Instant likes with counter, nested comments, and author badge display.</li>
+<li><strong>Club-Linked Posts</strong>: Posts can be scoped to specific school clubs or broadcast school-wide.</li>
+<li><strong>Content Moderation</strong>: Flagging system (<code>Report</code> table) enabling students to report inappropriate content directly to teachers and administrators.</li>
+</ul>
+<h3 id="d-school-clubs-communities">D. School Clubs &amp; Communities</h3>
+<ul>
+<li>Pre-seeded and custom extracurricular clubs:</li>
+<li>🔬 <strong>Science Club</strong> (Research, experiments, science fairs)</li>
+<li>🌿 <strong>Eco Club</strong> (Sustainability, green campus initiatives)</li>
+<li>💻 <strong>Coding &amp; Robotics Club</strong> (Hackathons, programming projects)</li>
+<li>⚽ <strong>Sports Club</strong> (Athletics, intramural tournaments)</li>
+<li>🎨 <strong>Arts &amp; Culture Club</strong> (Creative arts, exhibitions, theatre)</li>
+<li>Dedicated club pages with member rosters, discussion boards, and scheduled calendar events with dates and campus venues.</li>
+<li>Club leadership hierarchy: <code>MEMBER</code>, <code>MODERATOR</code>, and <code>LEADER</code>.</li>
+</ul>
+<h3 id="e-real-time-one-to-one-messaging">E. Real-Time One-to-One Messaging</h3>
+<ul>
+<li>Low-latency chat powered by <strong>Socket.IO</strong> WebSockets.</li>
+<li>Real-time online/offline presence indicators.</li>
+<li>Instant delivery of private messages between mutual connections.</li>
+<li>Persistent conversation history stored in PostgreSQL with read receipts (<code>isRead</code>).</li>
+</ul>
+<h3 id="f-interactive-polls-school-voting">F. Interactive Polls &amp; School Voting</h3>
+<ul>
+<li>Single-choice polls created by students, teachers, or administrators.</li>
+<li>Strict one-vote-per-student database constraint (<code>@@unique([pollId, userId])</code>).</li>
+<li>Real-time visual percentage progress bars and total vote counts.</li>
+<li>Optional expiration timestamps and auto-closure.</li>
+</ul>
+<h3 id="g-official-school-notice-board">G. Official School Notice Board</h3>
+<ul>
+<li>Authoritative announcements published exclusively by <strong>Teachers</strong> and <strong>Administrators</strong>.</li>
+<li>Categorized circulars:</li>
+<li>📋 <code>CIRCULAR</code> (Official school circulars and administrative letters)</li>
+<li>📅 <code>EXAM_SCHEDULE</code> (Mid-term, terminal, and Olympiad timetables)</li>
+<li>🎪 <code>EVENT</code> (Annual day, sports day, parent-teacher meetings)</li>
+<li>🏖️ <code>HOLIDAY_NOTICE</code> (Government and school holiday declarations)</li>
+<li>Urgency badge priority: <code>NORMAL</code>, <code>IMPORTANT</code>, and <code>URGENT</code>.</li>
+<li>Grade-level targeting (e.g., broadcast to <code>ALL</code> or specific grades).</li>
+<li>Downloadable document attachments.</li>
+</ul>
+<hr />
+<h2 id="3-academic-suite-new-core-architecture">3. Academic Suite (New Core Architecture)</h2>
+<h3 id="1-quizzes-olympiad-competitions-quizzes">1. Quizzes &amp; Olympiad Competitions (<code>/quizzes</code>)</h3>
+<ul>
+<li><strong>Untimed Competition Philosophy</strong>: No stress clocks or countdown timers. Students complete questions thoughtfully, review answers, and submit when confident.</li>
+<li><strong>Scheduled Competition Lifecycle</strong>:</li>
+<li><code>startDate</code>: Timestamp when the quiz officially opens for participation.</li>
+<li><code>endDate</code>: Timestamp when the quiz closes and official results are revealed.</li>
+<li>Real-time status tags: 🟢 <strong>Live Contest</strong>, ⏳ <strong>Upcoming</strong>, 🏆 <strong>Results Out</strong>.</li>
+<li><strong>Automated Grading &amp; Integrity</strong>:</li>
+<li>Objective multiple-choice question format (4 options with single correct answer).</li>
+<li>One submission per student constraint (<code>@@unique([quizId, studentId])</code>).</li>
+<li>Score and correct-answer lockdown: Correct answers remain hidden until after <code>endDate</code> to preserve competition integrity.</li>
+<li><strong>Role Permission</strong>: Only <strong>Teachers</strong> and <strong>Administrators</strong> can conduct new quiz competitions (<code>POST /api/v1/quizzes</code>) and remove competitions (<code>DELETE /api/v1/quizzes/:id</code>).</li>
+</ul>
+<h3 id="2-full-participant-leaderboard-winners-podium-leaderboard">2. Full Participant Leaderboard &amp; Winners Podium (<code>/leaderboard</code>)</h3>
+<ul>
+<li><strong>Global &amp; Competition-Specific Rankings</strong>: Toggle between individual competition standings and the overall School Hall of Fame.</li>
+<li><strong>Top 3 Winners Podium</strong>: Dedicated visual showcase celebrating Gold 🥇 (1st Place), Silver 🥈 (2nd Place), and Bronze 🥉 (3rd Place).</li>
+<li><strong>Exhaustive Participant Standings</strong>: Displays <strong>all participants</strong> (Rank 1 to N), including student name, class/grade, points earned, score percentage, and completion timestamp.</li>
+<li>Search and grade-filter capabilities to easily look up classmates and rankings.</li>
+</ul>
+<h3 id="3-assignments-homework-portal-assignments">3. Assignments &amp; Homework Portal (<code>/assignments</code>)</h3>
+<ul>
+<li><strong>Teacher Assignment Creation</strong>: Set title, description, subject, target grade, max points, reference attachment, and due date.</li>
+<li><strong>Student Online Submissions</strong>: Students turn in their work before deadlines with written responses and cloud-hosted attachments (Google Drive, PDFs, image proofs).</li>
+<li><strong>Teacher Grading &amp; Feedback Drawer</strong>:</li>
+<li>Review all submitted student works in real-time.</li>
+<li>Assign numeric points (e.g., 95/100) and automatic letter grades (A+, A, B, C).</li>
+<li>Provide personalized, constructive teacher feedback.</li>
+<li>Status filters: <code>All</code>, <code>Pending Submission</code>, <code>Submitted</code>, and <code>Graded</code>.</li>
+</ul>
+<h3 id="4-study-notes-revision-hub-notes">4. Study Notes &amp; Revision Hub (<code>/notes</code>)</h3>
+<ul>
+<li>Centralized digital library for revision notes, formula sheets, chapter summaries, and past papers.</li>
+<li>Tagged by Subject (<em>Mathematics, Science, Coding, English, Social Studies</em>) and Class/Grade (<em>Grade 6 to 12</em>).</li>
+<li>Direct document preview and external link access (Google Drive, PDFs).</li>
+<li><strong>Helpful Vote System (👍)</strong>: Students and teachers upvote useful revision notes, dynamically ranking the most helpful resources at the top.</li>
+</ul>
+<hr />
+<h2 id="4-user-roles-permission-matrix-rbac">4. User Roles &amp; Permission Matrix (RBAC)</h2>
+<table>
+<thead>
+<tr>
+<th>Capability / Action</th>
+<th style="text-align: center;">Student</th>
+<th style="text-align: center;">Teacher / Faculty</th>
+<th style="text-align: center;">Administrator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Register &amp; Manage Personal Profile</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Create Posts, Comments &amp; Likes</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Join Clubs &amp; Participate in Events</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Chat with Friends (1-to-1)</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Vote in School Polls</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Take Untimed Quizzes &amp; Competitions</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>View Full Leaderboards &amp; Podiums</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Submit Homework Assignments</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td>Upvote Helpful Study Notes</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td><strong>Conduct / Publish New Quizzes</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td><strong>Delete Quiz Competitions</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td><strong>Create Homework Assignments</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td><strong>Grade Submissions &amp; Give Feedback</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td><strong>Upload Study Notes to Hub</strong></td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td><strong>Publish Official School Notices</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td><strong>Block / Unblock Users</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td><strong>Moderate / Delete Any Post</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td><strong>Delete Clubs &amp; Manage System Metrics</strong></td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+</tbody>
+</table>
+<p><em>Configured Super Administrator: <code>nkms143@gmail.com</code> (<code>E.Amarnath</code>)</em></p>
+<hr />
+<h2 id="5-technology-stack-architectural-patterns">5. Technology Stack &amp; Architectural Patterns</h2>
+<h3 id="frontend-architecture">Frontend Architecture</h3>
+<ul>
+<li><strong>Framework</strong>: React 18 with TypeScript 5</li>
+<li><strong>Tooling &amp; Bundler</strong>: Vite 5 (Fast HMR, optimized chunking, ~20s production build)</li>
+<li><strong>Styling</strong>: Tailwind CSS v3/4 with dark mode support and custom color tokens</li>
+<li><strong>Routing</strong>: React Router DOM v6 (Protected routes, role gates, SPA rewrites)</li>
+<li><strong>Icons</strong>: Lucide React</li>
+<li><strong>HTTP Client</strong>: Axios with global interceptors for JWT token injection and 401 handling</li>
+<li><strong>Real-Time Client</strong>: Socket.IO Client for bidirectional event listeners</li>
+</ul>
+<h3 id="backend-architecture">Backend Architecture</h3>
+<ul>
+<li><strong>Runtime</strong>: Node.js 20+ (ES Modules)</li>
+<li><strong>Framework</strong>: Express.js 5 with TypeScript</li>
+<li><strong>Real-Time Engine</strong>: Socket.IO server bound to HTTP server</li>
+<li><strong>Database ORM</strong>: Prisma ORM 5 with dual client generators (root &amp; server client)</li>
+<li><strong>Security &amp; Utilities</strong>:</li>
+<li><code>bcryptjs</code>: Password hashing</li>
+<li><code>jsonwebtoken</code>: Stateless access token authentication</li>
+<li><code>cors</code>: Allowed origins with dynamic regex supporting Render deployments</li>
+<li><code>helmet</code>: HTTP security headers</li>
+<li><code>express-rate-limit</code>: Brute-force and DDoS mitigation</li>
+<li><code>nodemailer</code>: SMTP email transport for account verification and password recovery</li>
+</ul>
+<h3 id="database-architecture">Database Architecture</h3>
+<ul>
+<li><strong>Database</strong>: PostgreSQL 15 hosted on <strong>Supabase</strong> (AWS Mumbai <code>ap-south-1</code> region)</li>
+<li><strong>Connection Strategy</strong>: Supabase Session/Transaction connection pooling via port <code>6543</code> / <code>5432</code> with SSL mode <code>require</code></li>
+<li><strong>Schema Management</strong>: Prisma Schema (<code>prisma/schema.prisma</code>) with declarative push (<code>npx prisma db push</code>)</li>
+</ul>
+<hr />
+<h2 id="6-postgresql-database-schema-prisma-models">6. PostgreSQL Database Schema (Prisma Models)</h2>
+<pre><code class="language-prisma">datasource db {
+  provider = &quot;postgresql&quot;
+  url      = env(&quot;DATABASE_URL&quot;)
+}
+
+generator client {
+  provider = &quot;prisma-client-js&quot;
+}
+
+generator serverClient {
+  provider = &quot;prisma-client-js&quot;
+  output   = &quot;../server/node_modules/.prisma/client&quot;
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum NoticeCategory {
+  CIRCULAR
+  EXAM_SCHEDULE
+  EVENT
+  HOLIDAY_NOTICE
+}
+
+enum NoticePriority {
+  NORMAL
+  IMPORTANT
+  URGENT
+}
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum ClubRole {
+  MEMBER
+  MODERATOR
+  LEADER
+}
+
+enum ReportStatus {
+  PENDING
+  RESOLVED
+  DISMISSED
+}
+
+enum QuizStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+}
+
+enum SubmissionStatus {
+  PENDING
+  GRADED
+  LATE
+}
+
+// -------------------------------------------------------------
+// CORE USERS &amp; SOCIAL MODELS
+// -------------------------------------------------------------
+model User {
+  id                    String              @id @default(cuid())
+  email                 String              @unique
+  password              String
+  role                  Role                @default(STUDENT)
+  isVerified            Boolean             @default(false)
+  verificationToken     String?
+  resetPasswordToken    String?
+  resetPasswordExpires  DateTime?
+  isBlocked             Boolean             @default(false)
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+
+  profile               Profile?
+  posts                 Post[]              @relation(&quot;UserPosts&quot;)
+  comments              Comment[]
+  likes                 Like[]
+  sentFriendRequests    FriendRequest[]     @relation(&quot;SentRequests&quot;)
+  receivedFriendRequests FriendRequest[]    @relation(&quot;ReceivedRequests&quot;)
+  friendshipsInitiated  Friendship[]        @relation(&quot;UserAFriends&quot;)
+  friendshipsReceived   Friendship[]        @relation(&quot;UserBFriends&quot;)
+  clubMemberships       ClubMember[]
+  ledClubs              Club[]              @relation(&quot;ClubLeader&quot;)
+  clubDiscussions       ClubDiscussion[]
+  createdPolls          Poll[]
+  votes                 Vote[]
+  sentMessages          Message[]           @relation(&quot;SentMessages&quot;)
+  receivedMessages      Message[]           @relation(&quot;ReceivedMessages&quot;)
+  announcements         Announcement[]
+  reportsSubmitted      Report[]            @relation(&quot;Reporter&quot;)
+
+  // Academic Suite
+  quizzesCreated        Quiz[]              @relation(&quot;QuizCreator&quot;)
+  quizSubmissions       QuizSubmission[]
+  assignmentsCreated    Assignment[]        @relation(&quot;AssignmentCreator&quot;)
+  assignmentSubmissions AssignmentSubmission[]
+  notesAuthored         StudyNote[]         @relation(&quot;NoteAuthor&quot;)
+  noteHelpfulVotes      NoteHelpfulVote[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model Profile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName    String
+  avatarUrl   String?
+  grade       String?
+  section     String?
+  bio         String?
+  interests   String?
+  phone       String?
+  coverImage  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Post {
+  id          String    @id @default(cuid())
+  authorId    String
+  author      User      @relation(&quot;UserPosts&quot;, fields: [authorId], references: [id], onDelete: Cascade)
+  content     String
+  imageUrl    String?
+  clubId      String?
+  club        Club?     @relation(fields: [clubId], references: [id], onDelete: SetNull)
+  hashtags    String?
+  isModerated Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  comments    Comment[]
+  likes       Like[]
+
+  @@index([authorId])
+  @@index([createdAt])
+  @@index([clubId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([postId])
+  @@index([authorId])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
+  @@index([postId])
+  @@index([userId])
+}
+
+model FriendRequest {
+  id          String              @id @default(cuid())
+  senderId    String
+  sender      User                @relation(&quot;SentRequests&quot;, fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId  String
+  receiver    User                @relation(&quot;ReceivedRequests&quot;, fields: [receiverId], references: [id], onDelete: Cascade)
+  status      FriendRequestStatus @default(PENDING)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@unique([senderId, receiverId])
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+model Friendship {
+  id        String   @id @default(cuid())
+  userAId   String
+  userA     User     @relation(&quot;UserAFriends&quot;, fields: [userAId], references: [id], onDelete: Cascade)
+  userBId   String
+  userB     User     @relation(&quot;UserBFriends&quot;, fields: [userBId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userAId, userBId])
+  @@index([userAId])
+  @@index([userBId])
+}
+
+model Club {
+  id          String           @id @default(cuid())
+  name        String           @unique
+  slug        String           @unique
+  description String
+  category    String
+  bannerUrl   String?
+  iconUrl     String?
+  leaderId    String?
+  leader      User?            @relation(&quot;ClubLeader&quot;, fields: [leaderId], references: [id], onDelete: SetNull)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  members     ClubMember[]
+  posts       Post[]
+  events      ClubEvent[]
+  discussions ClubDiscussion[]
+}
+
+model ClubMember {
+  id       String   @id @default(cuid())
+  clubId   String
+  club     Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role     ClubRole @default(MEMBER)
+  joinedAt DateTime @default(now())
+
+  @@unique([clubId, userId])
+  @@index([clubId])
+  @@index([userId])
+}
+
+model ClubEvent {
+  id          String   @id @default(cuid())
+  clubId      String
+  club        Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  eventDate   DateTime
+  location    String
+  createdAt   DateTime @default(now())
+
+  @@index([clubId])
+}
+
+model ClubDiscussion {
+  id        String   @id @default(cuid())
+  clubId    String
+  club      Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clubId])
+  @@index([authorId])
+}
+
+model Poll {
+  id        String       @id @default(cuid())
+  creatorId String
+  creator   User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  question  String
+  expiresAt DateTime?
+  isClosed  Boolean      @default(false)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  options   PollOption[]
+  votes     Vote[]
+
+  @@index([creatorId])
+}
+
+model PollOption {
+  id        String   @id @default(cuid())
+  pollId    String
+  poll      Poll     @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  text      String
+  votes     Vote[]
+
+  @@index([pollId])
+}
+
+model Vote {
+  id        String     @id @default(cuid())
+  pollId    String
+  poll      Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  optionId  String
+  option    PollOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+
+  @@unique([pollId, userId])
+  @@index([pollId])
+  @@index([userId])
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  senderId   String
+  sender     User     @relation(&quot;SentMessages&quot;, fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User     @relation(&quot;ReceivedMessages&quot;, fields: [receiverId], references: [id], onDelete: Cascade)
+  content    String
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([senderId, receiverId])
+  @@index([receiverId])
+}
+
+model Announcement {
+  id            String         @id @default(cuid())
+  authorId      String
+  author        User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  title         String
+  content       String
+  category      NoticeCategory @default(CIRCULAR)
+  priority      NoticePriority @default(NORMAL)
+  attachmentUrl String?
+  targetGrade   String?        @default(&quot;ALL&quot;)
+  expiresAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([category])
+  @@index([priority])
+  @@index([createdAt])
+}
+
+model Report {
+  id          String       @id @default(cuid())
+  reporterId  String
+  reporter    User         @relation(&quot;Reporter&quot;, fields: [reporterId], references: [id], onDelete: Cascade)
+  targetType  String
+  targetId    String
+  reason      String
+  status      ReportStatus @default(PENDING)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([status])
+  @@index([reporterId])
+}
+
+// -------------------------------------------------------------
+// ACADEMIC SUITE MODELS
+// -------------------------------------------------------------
+model Quiz {
+  id                String           @id @default(cuid())
+  creatorId         String
+  creator           User             @relation(&quot;QuizCreator&quot;, fields: [creatorId], references: [id], onDelete: Cascade)
+  title             String
+  description       String
+  subject           String
+  grade             String
+  totalPoints       Int              @default(100)
+  status            QuizStatus       @default(PUBLISHED)
+  startDate         DateTime
+  endDate           DateTime
+  isResultsReleased Boolean          @default(false)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  questions         QuizQuestion[]
+  submissions       QuizSubmission[]
+
+  @@index([creatorId])
+  @@index([subject])
+  @@index([grade])
+  @@index([startDate, endDate])
+}
+
+model QuizQuestion {
+  id           String       @id @default(cuid())
+  quizId       String
+  quiz         Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  questionText String
+  options      String[]
+  correctIndex Int
+  points       Int          @default(10)
+  order        Int          @default(0)
+
+  answers      QuizAnswer[]
+
+  @@index([quizId])
+}
+
+model QuizSubmission {
+  id          String       @id @default(cuid())
+  quizId      String
+  quiz        Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  studentId   String
+  student     User         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  score       Int          @default(0)
+  maxScore    Int          @default(0)
+  completedAt DateTime     @default(now())
+
+  answers     QuizAnswer[]
+
+  @@unique([quizId, studentId])
+  @@index([quizId, score, completedAt])
+  @@index([studentId])
+}
+
+model QuizAnswer {
+  id            String         @id @default(cuid())
+  submissionId  String
+  submission    QuizSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  questionId    String
+  question      QuizQuestion   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  selectedIndex Int
+  isCorrect     Boolean
+  pointsAwarded Int            @default(0)
+
+  @@index([submissionId])
+}
+
+model Assignment {
+  id            String                 @id @default(cuid())
+  creatorId     String
+  creator       User                   @relation(&quot;AssignmentCreator&quot;, fields: [creatorId], references: [id], onDelete: Cascade)
+  title         String
+  description   String
+  subject       String
+  grade         String
+  dueDate       DateTime
+  maxPoints     Int                    @default(100)
+  attachmentUrl String?
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+
+  submissions   AssignmentSubmission[]
+
+  @@index([creatorId])
+  @@index([subject])
+  @@index([grade])
+  @@index([dueDate])
+}
+
+model AssignmentSubmission {
+  id            String           @id @default(cuid())
+  assignmentId  String
+  assignment    Assignment       @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  studentId     String
+  student       User             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  content       String
+  attachmentUrl String?
+  status        SubmissionStatus @default(PENDING)
+  grade         Int?
+  feedback      String?
+  submittedAt   DateTime         @default(now())
+  gradedAt      DateTime?
+
+  @@unique([assignmentId, studentId])
+  @@index([assignmentId])
+  @@index([studentId])
+}
+
+model StudyNote {
+  id           String            @id @default(cuid())
+  authorId     String
+  author       User              @relation(&quot;NoteAuthor&quot;, fields: [authorId], references: [id], onDelete: Cascade)
+  title        String
+  description  String
+  subject      String
+  grade        String
+  chapter      String?
+  fileUrl      String
+  fileType     String
+  helpfulCount Int               @default(0)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  helpfulVotes NoteHelpfulVote[]
+
+  @@index([subject])
+  @@index([grade])
+  @@index([authorId])
+}
+
+model NoteHelpfulVote {
+  id        String    @id @default(cuid())
+  noteId    String
+  note      StudyNote @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+
+  @@unique([noteId, userId])
+}
+</code></pre>
+<hr />
+<h2 id="7-complete-rest-api-specification">7. Complete REST API Specification</h2>
+<h3 id="authentication-apiv1auth">Authentication (<code>/api/v1/auth</code>)</h3>
+<ul>
+<li><code>POST /register</code>: Create student/teacher account with hashed password.</li>
+<li><code>POST /login</code>: Authenticate credentials, verify status, return JWT and user profile.</li>
+<li><code>GET /me</code>: Return current authenticated session profile.</li>
+<li><code>POST /forgot-password</code>: Send 1-hour secure password reset token.</li>
+<li><code>POST /reset-password</code>: Set new password with cryptographic token.</li>
+<li><code>GET /verify-email</code>: Verify student email address.</li>
+</ul>
+<h3 id="quizzes-competitions-apiv1quizzes">Quizzes &amp; Competitions (<code>/api/v1/quizzes</code>)</h3>
+<ul>
+<li><code>GET /</code>: Fetch all competitions with user-submission status and dynamic state (<code>ACTIVE</code>, <code>UPCOMING</code>, <code>ENDED</code>).</li>
+<li><code>GET /:id</code>: Fetch competition questions (omits <code>correctIndex</code> if user is taking the quiz or contest is ongoing).</li>
+<li><code>POST /</code>: <em>(Teachers &amp; Admins)</em> Create new competition with untimed question pool and schedule.</li>
+<li><code>POST /:id/submit</code>: Grade student answers, calculate total score, record submission.</li>
+<li><code>GET /:id/leaderboard</code>: Fetch ranking of all participants for a specific competition.</li>
+<li><code>GET /leaderboard/global</code>: Fetch school-wide Hall of Fame overall student leaderboard.</li>
+<li><code>DELETE /:id</code>: <em>(Teachers &amp; Admins)</em> Delete quiz and related submissions.</li>
+</ul>
+<h3 id="assignments-homework-apiv1assignments">Assignments &amp; Homework (<code>/api/v1/assignments</code>)</h3>
+<ul>
+<li><code>GET /</code>: Fetch assignments filtered by subject, grade, and submission status.</li>
+<li><code>GET /:id</code>: Fetch assignment details with student submission state.</li>
+<li><code>POST /</code>: <em>(Teachers &amp; Admins)</em> Post new homework assignment with due date and attachments.</li>
+<li><code>POST /:id/submit</code>: Submit student work (text summary + cloud drive link).</li>
+<li><code>GET /:id/submissions</code>: <em>(Teachers &amp; Admins)</em> Retrieve all student turned-in assignments.</li>
+<li><code>POST /submissions/:submissionId/grade</code>: <em>(Teachers &amp; Admins)</em> Grade student work with points (e.g. 95/100) and feedback.</li>
+</ul>
+<h3 id="study-notes-apiv1notes">Study Notes (<code>/api/v1/notes</code>)</h3>
+<ul>
+<li><code>GET /</code>: Retrieve shared study notes with subject/grade filters and search.</li>
+<li><code>POST /</code>: Upload new revision guide, chapter summary, or formula sheet.</li>
+<li><code>POST /:id/helpful</code>: Toggle helpful upvote (👍) on a study guide.</li>
+<li><code>DELETE /:id</code>: Remove note (author or admin only).</li>
+</ul>
+<h3 id="posts-feeds-apiv1posts">Posts &amp; Feeds (<code>/api/v1/posts</code>)</h3>
+<ul>
+<li><code>GET /</code>: Feed of recent school posts with comment/like counts.</li>
+<li><code>POST /</code>: Create new post (optional image and hashtags).</li>
+<li><code>POST /:id/like</code>: Toggle like on post.</li>
+<li><code>POST /:id/comments</code>: Add comment to post.</li>
+<li><code>DELETE /:id</code>: Remove post (author, teacher, or admin).</li>
+</ul>
+<h3 id="clubs-apiv1clubs">Clubs (<code>/api/v1/clubs</code>)</h3>
+<ul>
+<li><code>GET /</code>: List all school clubs with category and membership counts.</li>
+<li><code>GET /:slug</code>: Retrieve club profile, discussions, events, and member list.</li>
+<li><code>POST /:slug/join</code>: Join club.</li>
+<li><code>POST /:slug/leave</code>: Leave club.</li>
+<li><code>POST /:slug/events</code>: <em>(Club Leader / Teacher)</em> Create club event.</li>
+<li><code>POST /:slug/discussions</code>: Start new discussion thread in club.</li>
+</ul>
+<h3 id="polls-apiv1polls">Polls (<code>/api/v1/polls</code>)</h3>
+<ul>
+<li><code>GET /</code>: List all active and past polls with user vote indicators.</li>
+<li><code>POST /</code>: Create new school poll.</li>
+<li><code>POST /:id/vote</code>: Submit single choice vote on poll option.</li>
+</ul>
+<h3 id="notice-board-apiv1announcements">Notice Board (<code>/api/v1/announcements</code>)</h3>
+<ul>
+<li><code>GET /</code>: Fetch official school notices filtered by category and priority.</li>
+<li><code>POST /</code>: <em>(Teachers &amp; Admins)</em> Publish official circular or exam schedule.</li>
+<li><code>DELETE /:id</code>: <em>(Admins &amp; Authors)</em> Delete notice.</li>
+</ul>
+<h3 id="direct-messaging-apiv1messages">Direct Messaging (<code>/api/v1/messages</code>)</h3>
+<ul>
+<li><code>GET /conversations</code>: List active chats with latest message and unread count.</li>
+<li><code>GET /:userId</code>: Retrieve message history between two users.</li>
+<li><code>POST /:userId</code>: Send direct message (also emits real-time WebSocket event).</li>
+</ul>
+<hr />
+<h2 id="8-deployment-architecture">8. Deployment Architecture</h2>
+<h3 id="high-level-topology">High-Level Topology</h3>
+<pre><code class="language-mermaid">flowchart TD
+    User[&quot;👨‍🎓 Students &amp; 👩‍🏫 Teachers (Web Browsers)&quot;]
+
+    subgraph Render[&quot;Render Cloud Platform&quot;]
+        Frontend[&quot;🌐 Static Site: schoolconnect (React / Vite SPA)\nhttps://schoolconnect-3gwn.onrender.com\nRewrite: /* -&gt; /index.html&quot;]
+        Backend[&quot;⚙️ Web Service: schoolconnect-backend (Node.js / Express)\nhttps://schoolconnect-backend-1bs9.onrender.com\nPort 10000 | Health: /api/health&quot;]
+    end
+
+    subgraph CloudDB[&quot;Supabase Managed Cloud&quot;]
+        Postgres[&quot;🐘 PostgreSQL 15 Database\naws-0-ap-south-1.pooler.supabase.com\nSession Pooler (Port 5432/6543)&quot;]
+    end
+
+    User --&gt;|HTTPS Traffic| Frontend
+    Frontend --&gt;|REST API Requests| Backend
+    Frontend &lt;--&gt;|WebSockets (Socket.IO)| Backend
+    Backend --&gt;|Prisma ORM over TLS| Postgres
+</code></pre>
+<h3 id="1-live-production-endpoints">1. Live Production Endpoints</h3>
+<ul>
+<li><strong>Frontend URL</strong>: <code>https://schoolconnect-3gwn.onrender.com</code></li>
+<li><strong>Backend API URL</strong>: <code>https://schoolconnect-backend-1bs9.onrender.com</code></li>
+<li><strong>Health Check</strong>: <code>https://schoolconnect-backend-1bs9.onrender.com/api/health</code></li>
+<li><strong>Git Repository</strong>: <code>https://github.com/nkms143/schoolconnect.git</code> (<code>main</code> branch)</li>
+</ul>
+<hr />
+<h3 id="2-render-blueprint-specification-renderyaml">2. Render Blueprint Specification (<code>render.yaml</code>)</h3>
+<pre><code class="language-yaml">version: &quot;1&quot;
+
+services:
+  # Backend Node.js / Express API Service
+  - type: web
+    name: schoolconnect-backend
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: server
+    buildCommand: npm install --include=dev &amp;&amp; npm run db:generate &amp;&amp; npm run build
+    startCommand: npm run db:push &amp;&amp; npm run db:seed &amp;&amp; npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CLIENT_URL
+        value: &quot;*&quot;
+
+  # Frontend React Static Site
+  - type: web
+    name: schoolconnect
+    runtime: static
+    rootDir: client
+    buildCommand: npm install &amp;&amp; npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: schoolconnect-backend
+          property: host
+      - key: VITE_SOCKET_URL
+        fromService:
+          type: web
+          name: schoolconnect-backend
+          property: host
+</code></pre>
+<hr />
+<h3 id="3-environment-variables-reference">3. Environment Variables Reference</h3>
+<h4 id="backend-service-serverenv">Backend Service (<code>server/.env</code>)</h4>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th style="text-align: center;">Required</th>
+<th>Description</th>
+<th>Example / Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NODE_ENV</code></td>
+<td style="text-align: center;">Yes</td>
+<td>Application environment</td>
+<td><code>production</code></td>
+</tr>
+<tr>
+<td><code>PORT</code></td>
+<td style="text-align: center;">Yes</td>
+<td>HTTP server binding port</td>
+<td><code>10000</code></td>
+</tr>
+<tr>
+<td><code>DATABASE_URL</code></td>
+<td style="text-align: center;">Yes</td>
+<td>PostgreSQL connection pooler URI</td>
+<td><code>postgresql://postgres.[ref]:[pwd]@aws-0-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true</code></td>
+</tr>
+<tr>
+<td><code>JWT_SECRET</code></td>
+<td style="text-align: center;">Yes</td>
+<td>Secret key for signing bearer tokens</td>
+<td>64-char random hex string</td>
+</tr>
+<tr>
+<td><code>JWT_EXPIRES_IN</code></td>
+<td style="text-align: center;">Yes</td>
+<td>Token expiry duration</td>
+<td><code>7d</code></td>
+</tr>
+<tr>
+<td><code>CLIENT_URL</code></td>
+<td style="text-align: center;">Yes</td>
+<td>Allowed CORS origin (or wildcard)</td>
+<td><code>https://schoolconnect-3gwn.onrender.com</code></td>
+</tr>
+<tr>
+<td><code>SMTP_HOST</code></td>
+<td style="text-align: center;">Optional</td>
+<td>SMTP host for password resets</td>
+<td><code>smtp.gmail.com</code></td>
+</tr>
+<tr>
+<td><code>SMTP_PORT</code></td>
+<td style="text-align: center;">Optional</td>
+<td>SMTP port</td>
+<td><code>587</code></td>
+</tr>
+<tr>
+<td><code>SMTP_USER</code></td>
+<td style="text-align: center;">Optional</td>
+<td>SMTP username</td>
+<td><code>schoolconnect.mailer@gmail.com</code></td>
+</tr>
+<tr>
+<td><code>SMTP_PASS</code></td>
+<td style="text-align: center;">Optional</td>
+<td>SMTP application password</td>
+<td><code>app_password_here</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="frontend-static-site-clientenv">Frontend Static Site (<code>client/.env</code>)</h4>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th style="text-align: center;">Required</th>
+<th>Description</th>
+<th>Example / Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VITE_API_URL</code></td>
+<td style="text-align: center;">Yes</td>
+<td>Target backend REST API URL</td>
+<td><code>https://schoolconnect-backend-1bs9.onrender.com</code></td>
+</tr>
+<tr>
+<td><code>VITE_SOCKET_URL</code></td>
+<td style="text-align: center;">Yes</td>
+<td>Target backend Socket.IO URL</td>
+<td><code>https://schoolconnect-backend-1bs9.onrender.com</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="4-monorepo-directory-layout">4. Monorepo Directory Layout</h3>
+<pre><code class="language-text">schoolconnect/
+├── client/                              # Frontend React SPA
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── common/                  # Navbar, Sidebar, MobileDrawer, Button, Modal
+│   │   │   ├── quizzes/                 # QuizTakeModal, QuizCreateModal
+│   │   │   ├── assignments/             # AssignmentSubmitModal, CreateModal, GradeDrawer
+│   │   │   ├── notes/                   # NoteUploadModal
+│   │   │   ├── clubs/                   # ClubCard, EventCard, DiscussionModal
+│   │   │   └── posts/                   # PostCard, CreatePostCard, CommentSection
+│   │   ├── context/                     # AuthContext, ThemeContext, SocketContext
+│   │   ├── pages/                       # QuizzesPage, Leaderboard, Assignments, Notes, etc.
+│   │   ├── services/                    # Axios API service abstraction modules
+│   │   ├── types/                       # TypeScript models and API payload contracts
+│   │   ├── App.tsx                      # Client routes and protected route gates
+│   │   └── main.tsx                     # React root mount
+│   ├── index.html
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── vite.config.ts
+├── server/                              # Backend Express REST &amp; WebSocket API
+│   ├── src/
+│   │   ├── config/                      # Environment parser and Prisma client instances
+│   │   ├── controllers/                 # Controllers (Quiz, Assignment, Note, Auth, etc.)
+│   │   ├── middleware/                  # authMiddleware, requireRole, errorHandler
+│   │   ├── routes/                      # Express router definitions mounted under /api/v1
+│   │   ├── services/                    # Socket.IO handlers, email transport
+│   │   ├── app.ts                       # Express application factory and middleware pipeline
+│   │   └── server.ts                    # HTTP and WebSocket server initialization
+│   ├── package.json
+│   └── tsconfig.json
+├── prisma/
+│   ├── schema.prisma                    # PostgreSQL schema definition with dual generators
+│   └── seed.ts                          # Comprehensive database seeding script
+├── scripts/
+│   └── seed-academic-data.ts            # Academic Suite sample seed script
+├── docs/
+│   └── DEPLOYMENT_GUIDE.md              # Detailed step-by-step production deployment manual
+├── render.yaml                          # Render infrastructure blueprint specification
+├── SchoolConnect_AI_Studio_Prompt.md    # Master AI Studio System Prompt &amp; Specification
+└── README.md                            # High-level project documentation
+</code></pre>
+<hr />
+<h2 id="9-instructions-for-google-ai-studio">9. Instructions for Google AI Studio</h2>
+<p>When prompted with this specification, Google AI Studio must:
+1. <strong>Adhere to the Separation of Concerns</strong>: Maintain isolated, type-safe API controllers, unified Prisma schema definitions, and modular React components.
+2. <strong>Preserve Untimed Quiz Rules</strong>: Never inject forced countdown timers or auto-submission clocks into competition models or components. Results and correct answer options must remain concealed until after <code>endDate</code>.
+3. <strong>Respect Role Privileges (RBAC)</strong>: Ensure that destructive or administrative actions (<code>POST /quizzes</code>, <code>POST /assignments</code>, <code>POST /announcements</code>, grading workflows, user blocking) are strictly protected by server-side role validation middleware.
+4. <strong>Maintain Production Styling &amp; High Contrast</strong>: Ensure all buttons and action cards render with accessible color contrast ratios across light and dark modes (e.g., preventing white text on white backgrounds).
+5. <strong>Ensure Render &amp; Supabase Compatibility</strong>: Generate dual Prisma client generators so that monorepo paths (<code>client/</code> and <code>server/</code>) resolve generated types without compilation errors.</p>
+</body>
+</html>

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { GraduationCap, Mail, Lock, LogIn } from 'lucide-react';
+import { Mail, Lock, LogIn } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/common/Button';
 import { ThemeToggle } from '../components/common/ThemeToggle';
+import { Logo } from '../components/common/Logo';
 
 export const LoginPage: React.FC = () => {
   const { login } = useAuth();
@@ -36,15 +37,8 @@ export const LoginPage: React.FC = () => {
         <ThemeToggle />
       </div>
 
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <Link to="/" className="inline-flex items-center gap-2 group mb-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-            <GraduationCap className="w-7 h-7" />
-          </div>
-          <span className="text-2xl font-black bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            SchoolConnect
-          </span>
-        </Link>
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center flex flex-col items-center">
+        <Logo size="lg" className="mb-3" />
         <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
           Welcome back to your school community
         </h2>

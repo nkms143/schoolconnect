@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import {
-  GraduationCap,
   X,
   Home,
   Users2,
@@ -23,6 +22,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Avatar } from '../common/Avatar';
 import { RoleBadge } from '../common/Badge';
 import { ThemeToggle } from '../common/ThemeToggle';
+import { Logo } from '../common/Logo';
 
 interface MobileDrawerProps {
   isOpen: boolean;
@@ -96,23 +96,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
         <div className="p-4 space-y-4">
           {/* Header */}
           <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-            <Link
-              to="/"
-              onClick={onClose}
-              className="flex items-center gap-2.5 group"
-            >
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm shadow-blue-500/20">
-                <GraduationCap className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-lg font-black tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                  SchoolConnect
-                </span>
-                <p className="text-[10px] uppercase font-bold tracking-wider text-slate-400 -mt-1">
-                  Student Network
-                </p>
-              </div>
-            </Link>
+            <Logo size="sm" onClick={onClose} />
 
             <button
               onClick={onClose}
