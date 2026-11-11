@@ -5,24 +5,50 @@ export interface VisitorStats {
   updatedAt?: string;
 }
 
+const CACHE_KEY = 'sc_cached_visitor_count';
+const SESSION_KEY = 'sc_session_visited';
+
 export const analyticsService = {
+  getCachedVisitCount(): number {
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached !== null) {
+        const parsed = Number(cached);
+        if (!isNaN(parsed)) return parsed;
+      }
+    } catch {
+      // Ignore localStorage access restrictions
+    }
+    return 0;
+  },
+
   async getOrRecordVisit(): Promise<number> {
     try {
-      const hasTracked = sessionStorage.getItem('sc_session_visited');
+      const hasTracked = sessionStorage.getItem(SESSION_KEY);
+      const endpoint = !hasTracked ? '/api/v1/analytics/visit' : '/api/v1/analytics/stats';
+
+      const res = !hasTracked
+        ? await api.post<{ totalVisits: number }>(endpoint)
+        : await api.get<{ totalVisits: number }>(endpoint);
+
       if (!hasTracked) {
-        const res = await api.post<{ totalVisits: number }>('/api/v1/analytics/visit');
-        sessionStorage.setItem('sc_session_visited', 'true');
-        if (res.data?.totalVisits) {
-          return res.data.totalVisits;
-        }
+        sessionStorage.setItem(SESSION_KEY, 'true');
       }
 
-      const statsRes = await api.get<{ totalVisits: number }>('/api/v1/analytics/stats');
-      return statsRes.data?.totalVisits || 1250;
+      const total = res.data?.totalVisits;
+      if (typeof total === 'number') {
+        try {
+          localStorage.setItem(CACHE_KEY, String(total));
+        } catch {
+          // Ignore localStorage access restrictions
+        }
+        return total;
+      }
+
+      return this.getCachedVisitCount();
     } catch (err) {
-      console.warn('Visitor counter fetch failed, using fallback:', err);
-      return 1250;
+      console.warn('Visitor counter sync failed, using cached count:', err);
+      return this.getCachedVisitCount();
     }
   }
 };
-

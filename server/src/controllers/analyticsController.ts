@@ -11,7 +11,7 @@ export const recordVisit = async (req: Request, res: Response) => {
       },
       create: {
         key: 'total_visitors',
-        value: 1251
+        value: 1
       }
     });
 
@@ -35,7 +35,7 @@ export const getStats = async (req: Request, res: Response) => {
       metric = await prisma.siteMetric.create({
         data: {
           key: 'total_visitors',
-          value: 1250
+          value: 0
         }
       });
     }

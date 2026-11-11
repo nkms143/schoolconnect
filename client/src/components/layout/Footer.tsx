@@ -21,8 +21,8 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ compact = false }) => {
-  const [visitorCount, setVisitorCount] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [visitorCount, setVisitorCount] = useState<number>(() => analyticsService.getCachedVisitCount());
+  const [isSyncing, setIsSyncing] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
@@ -31,13 +31,12 @@ export const Footer: React.FC<FooterProps> = ({ compact = false }) => {
       .then((count) => {
         if (isMounted) {
           setVisitorCount(count);
-          setIsLoading(false);
+          setIsSyncing(false);
         }
       })
       .catch(() => {
         if (isMounted) {
-          setVisitorCount(1250);
-          setIsLoading(false);
+          setIsSyncing(false);
         }
       });
 
@@ -55,12 +54,14 @@ export const Footer: React.FC<FooterProps> = ({ compact = false }) => {
         {/* Dynamic Visitor Counter Pill */}
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-slate-700 dark:text-slate-300 font-medium">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            {isSyncing && (
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            )}
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
           <Eye className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
           <span>
-            {isLoading ? 'Counting visits...' : `${visitorCount?.toLocaleString()} Cumulative Visits`}
+            {visitorCount.toLocaleString()} Cumulative Visits
           </span>
         </div>
 
@@ -167,21 +168,19 @@ export const Footer: React.FC<FooterProps> = ({ compact = false }) => {
               <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400">
                 <span className="flex items-center gap-1.5">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    {isSyncing && (
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    )}
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                   </span>
                   Campus Visits
                 </span>
                 <span className="text-emerald-600 dark:text-emerald-400 text-[10px] uppercase tracking-wider font-extrabold">
-                  Live Counter
+                  {isSyncing ? 'Syncing...' : 'Live Counter'}
                 </span>
               </div>
               <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
-                {isLoading ? (
-                  <span className="animate-pulse text-slate-400 text-lg">Loading...</span>
-                ) : (
-                  visitorCount?.toLocaleString()
-                )}
+                {visitorCount.toLocaleString()}
               </div>
               <p className="text-[10px] text-slate-400 leading-tight">
                 Cumulative unique website visits recorded across school sessions.
