@@ -998,6 +998,15 @@ model NoteHelpfulVote {
 
   @@unique([noteId, userId])
 }
+
+// -------------------------------------------------------------
+// SITE ANALYTICS &amp; VISITOR METRICS
+// -------------------------------------------------------------
+model SiteMetric {
+  key       String   @id
+  value     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
 </code></pre>
 <hr />
 <h2 id="7-complete-rest-api-specification">7. Complete REST API Specification</h2>
@@ -1070,6 +1079,11 @@ model NoteHelpfulVote {
 <li><code>GET /conversations</code>: List active chats with latest message and unread count.</li>
 <li><code>GET /:userId</code>: Retrieve message history between two users.</li>
 <li><code>POST /:userId</code>: Send direct message (also emits real-time WebSocket event).</li>
+</ul>
+<h3 id="site-analytics-visitor-tracking-apiv1analytics">Site Analytics &amp; Visitor Tracking (<code>/api/v1/analytics</code>)</h3>
+<ul>
+<li><code>POST /visit</code>: Increment and return cumulative unique visitor count with database persistence.</li>
+<li><code>GET /stats</code>: Retrieve current visitor metrics and timestamp without incrementing.</li>
 </ul>
 <hr />
 <h2 id="8-deployment-architecture">8. Deployment Architecture</h2>

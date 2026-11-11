@@ -17,6 +17,7 @@ import adminRoutes from './routes/adminRoutes.js';
 import quizRoutes from './routes/quizRoutes.js';
 import assignmentRoutes from './routes/assignmentRoutes.js';
 import noteRoutes from './routes/noteRoutes.js';
+import analyticsRoutes from './routes/analyticsRoutes.js';
 
 export const createApp = (): Application => {
   const app = express();
@@ -84,6 +85,7 @@ export const createApp = (): Application => {
   app.use('/api/v1/quizzes', quizRoutes);
   app.use('/api/v1/assignments', assignmentRoutes);
   app.use('/api/v1/notes', noteRoutes);
+  app.use('/api/v1/analytics', analyticsRoutes);
 
   // Fallback 404
   app.use((req: Request, res: Response) => {

@@ -663,6 +663,15 @@ model NoteHelpfulVote {
 
   @@unique([noteId, userId])
 }
+
+// -------------------------------------------------------------
+// SITE ANALYTICS & VISITOR METRICS
+// -------------------------------------------------------------
+model SiteMetric {
+  key       String   @id
+  value     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
 ```
 
 ---
@@ -729,6 +738,10 @@ model NoteHelpfulVote {
 - `GET /conversations`: List active chats with latest message and unread count.
 - `GET /:userId`: Retrieve message history between two users.
 - `POST /:userId`: Send direct message (also emits real-time WebSocket event).
+
+### Site Analytics & Visitor Tracking (`/api/v1/analytics`)
+- `POST /visit`: Increment and return cumulative unique visitor count with database persistence.
+- `GET /stats`: Retrieve current visitor metrics and timestamp without incrementing.
 
 ---
 

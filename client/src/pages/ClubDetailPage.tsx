@@ -143,6 +143,13 @@ export const ClubDetailPage: React.FC = () => {
     });
   };
 
+  const isIconImage = Boolean(
+    club.iconUrl &&
+    (club.iconUrl.startsWith('http://') ||
+     club.iconUrl.startsWith('https://') ||
+     club.iconUrl.startsWith('/'))
+  );
+
   return (
     <Layout>
       <div className="space-y-6">
@@ -166,8 +173,19 @@ export const ClubDetailPage: React.FC = () => {
 
             <div className="absolute bottom-4 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-white">
               <div className="flex items-center gap-3">
-                <div className="w-14 h-14 rounded-2xl bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-slate-100 flex items-center justify-center text-3xl shadow-xl backdrop-blur-md">
-                  {club.iconUrl || '🏫'}
+                <div className="w-14 h-14 rounded-2xl bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-slate-100 flex items-center justify-center text-3xl shadow-xl backdrop-blur-md overflow-hidden border border-white/20 flex-shrink-0">
+                  {isIconImage ? (
+                    <img
+                      src={club.iconUrl}
+                      alt={club.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLElement).style.display = 'none';
+                      }}
+                    />
+                  ) : (
+                    <span>{club.iconUrl || '🏫'}</span>
+                  )}
                 </div>
                 <div>
                   <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-sm">

@@ -82,7 +82,7 @@ async function main() {
       description: 'Explore programming, web development, algorithms, and participate in hackathons.',
       category: 'Technology',
       bannerUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80',
-      iconUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=200&q=80'
+      iconUrl: '💻'
     },
     {
       name: 'Science & Astronomy Club',
@@ -90,7 +90,7 @@ async function main() {
       description: 'Hands-on scientific experiments, Olympiad prep, and space exploration discussions.',
       category: 'Academics',
       bannerUrl: 'https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&w=1200&q=80',
-      iconUrl: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=200&q=80'
+      iconUrl: '🔬'
     },
     {
       name: 'Eco Campus & Green Club',
@@ -98,7 +98,7 @@ async function main() {
       description: 'Promoting school recycling, campus biodiversity, tree plantation drives, and environmental sustainability.',
       category: 'Environment',
       bannerUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80',
-      iconUrl: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=200&q=80'
+      iconUrl: '🌿'
     },
     {
       name: 'Sports & Athletics Club',
@@ -106,7 +106,7 @@ async function main() {
       description: 'Track and field, football, basketball, tournaments, and fitness routines for athletes.',
       category: 'Sports',
       bannerUrl: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1200&q=80',
-      iconUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=200&q=80'
+      iconUrl: '⚽'
     },
     {
       name: 'Arts, Design & Photography Club',
@@ -114,7 +114,7 @@ async function main() {
       description: 'Visual arts, sketch workshops, campus gallery exhibits, and creative photography projects.',
       category: 'Arts',
       bannerUrl: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1200&q=80',
-      iconUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=200&q=80'
+      iconUrl: '🎨'
     }
   ];
 

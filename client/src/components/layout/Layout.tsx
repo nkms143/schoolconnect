@@ -4,6 +4,7 @@ import { Sidebar } from './Sidebar';
 import { RightSidebar } from './RightSidebar';
 import { MobileNav } from './MobileNav';
 import { MobileDrawer } from './MobileDrawer';
+import { Footer } from './Footer';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -23,7 +24,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, showRightSidebar = tru
         onClose={() => setIsMobileDrawerOpen(false)}
       />
 
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20 md:pb-6">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex gap-6 items-start">
           {/* Main Sidebar (Desktop) */}
           <Sidebar />
@@ -35,6 +36,9 @@ export const Layout: React.FC<LayoutProps> = ({ children, showRightSidebar = tru
           {showRightSidebar && <RightSidebar />}
         </div>
       </div>
+
+      {/* Universal Website Footer Module */}
+      <Footer />
 
       {/* Mobile Bottom Navigation */}
       <MobileNav onOpenMenu={() => setIsMobileDrawerOpen(true)} />

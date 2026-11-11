@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/common/Button';
 import { ThemeToggle } from '../components/common/ThemeToggle';
 import { Logo } from '../components/common/Logo';
+import { Footer } from '../components/layout/Footer';
 
 export const RegisterPage: React.FC = () => {
   const { register } = useAuth();
@@ -188,6 +189,9 @@ export const RegisterPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Website Footer Module */}
+      <Footer compact />
     </div>
   );
 };

@@ -37,6 +37,13 @@ export const ClubCard: React.FC<ClubCardProps> = ({ club, onStatusChange }) => {
     }
   };
 
+  const isIconImage = Boolean(
+    club.iconUrl &&
+    (club.iconUrl.startsWith('http://') ||
+     club.iconUrl.startsWith('https://') ||
+     club.iconUrl.startsWith('/'))
+  );
+
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col group transition-all hover:shadow-md">
       {/* Banner */}
@@ -50,8 +57,19 @@ export const ClubCard: React.FC<ClubCardProps> = ({ club, onStatusChange }) => {
         ) : (
           <div className="w-full h-full bg-gradient-to-r from-blue-600 to-indigo-600" />
         )}
-        <div className="absolute top-3 left-3 w-10 h-10 rounded-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm flex items-center justify-center text-xl shadow-md">
-          {club.iconUrl || '🏫'}
+        <div className="absolute top-3 left-3 w-10 h-10 rounded-xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm flex items-center justify-center text-xl shadow-md overflow-hidden border border-white/20">
+          {isIconImage ? (
+            <img
+              src={club.iconUrl}
+              alt={club.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.currentTarget as HTMLElement).style.display = 'none';
+              }}
+            />
+          ) : (
+            <span>{club.iconUrl || '🏫'}</span>
+          )}
         </div>
         <span className="absolute top-3 right-3 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-black/60 text-white backdrop-blur-sm">
           {club.category}

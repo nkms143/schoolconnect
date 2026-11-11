@@ -516,3 +516,12 @@ model NoteHelpfulVote {
 
   @@unique([noteId, userId])
 }
+
+// ==========================================
+// 4. SITE ANALYTICS & METRICS
+// ==========================================
+model SiteMetric {
+  key       String   @id
+  value     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
